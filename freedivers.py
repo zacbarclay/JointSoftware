@@ -35,6 +35,12 @@ def guestbook_key(guestbook_name=DEFAULT_GUESTBOOK_NAME):
 
     return ndb.Key('Guestbook',guestbook_name)
 
+
+class DiverUser(ndb.Model):
+	#stores info about users
+	userId = ndb.StringProperty(indexed=False)
+	fruit = ndb.StringProperty(indexed=False)
+
 class Author(ndb.Model):
     #Sub model for representating an author.
     identity = ndb.StringProperty(indexed=False)
@@ -46,6 +52,7 @@ class Greeting(ndb.Model):
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
 
+
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
@@ -54,7 +61,9 @@ class MainPage(webapp2.RequestHandler):
         greetings_query = Greeting.query(
             ancestor=guestbook_key(guestbook_name)).order(-Greeting.date)
         greetings = greetings_query.fetch(10)
-
+		
+		#myVar = 23
+	
         user = users.get_current_user()
         if user:
             url = users.create_logout_url(self.request.uri)
@@ -73,23 +82,54 @@ class MainPage(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
-		
+	
+
+
 class Events(webapp2.RequestHandler):
 
 	def get(self):
 		self.response.write("EVENTS")
+		
+		
+	
+class UserCreate(webapp2.RequestHandler):
 
-class Profile(webapp2.RequestHandler):
+	def post(self):
+		#capture the form data and save to db
+		user_id = "blank"
+		user = users.get_current_user()
+		if user:
+			userId = user.user_id()
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
+		
+		#guestbook_name = DEFAULT_GUESTBOOK_NAME
+		#newUser = DiverUser(parent=guestbook_key(guestbook_name))
+		
+		
+		#newUser.fruit ="Apple"
+        #newUser.put()
+
+class Users(webapp2.RequestHandler):
 
 	def get(self):
 		name = self.request.get('name')
 		reps = int(self.request.get('reps'))
+		
+		user = users.get_current_user()
+		
+		if user:
+			name = user.nickname()
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
+		
 		template_values = {
 			'name':name,
 			'reps':reps
 		}
-		template = JINJA_ENVIRONMENT.get_template('profile.html')
+		template = JINJA_ENVIRONMENT.get_template('users.html')
 		self.response.write(template.render(template_values))
+		
 
 class Guestbook(webapp2.RequestHandler):
 
@@ -100,21 +140,22 @@ class Guestbook(webapp2.RequestHandler):
         #rate to a single entity group should be limited to
         # ~1/second.
 
-        guestbook_name = self.request.get('guestbook_name',
-                                              DEFAULT_GUESTBOOK_NAME)
+        guestbook_name = self.request.get('guestbook_name',DEFAULT_GUESTBOOK_NAME)
         greeting = Greeting(parent=guestbook_key(guestbook_name))
-
+		
         if users.get_current_user():
             greeting.author = Author(
-                identity=users.get_current_user().user_id(),
+				identity=users.get_current_user().user_id(),
                 email=users.get_current_user().email())
             greeting.content = self.request.get('content')
             greeting.put()
 
             query_params = {'guestbook_name': guestbook_name}
             self.redirect('/?' + urllib.urlencode(query_params))
+
 app = webapp2.WSGIApplication([
         ('/',MainPage),
         ('/events',Events),
-		('/profile',Profile)
+		('/users',Users),
+		('/userCreate',Guestbook)
 ], debug = True)
