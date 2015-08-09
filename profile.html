@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+	<title>Profile</title>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/home.css"/>
+</head>
+<body>
+	<h2>Profile</h2>
+	{% for x in range(0,reps) %}
+		<p>{{ name }}</p>
+	{% endfor %}
+	
+</body>
+</html>
+{% endautoescape %}
+
