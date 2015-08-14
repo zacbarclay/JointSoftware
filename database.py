@@ -12,7 +12,7 @@ class users(db.Model):
 						password = db.StringProperty(Required=True)
 						role = db.StringProperty(Required=True,
 																												choices=set(["treasurer","eventManager","user"]))
-						email = db.StringProperty(Required=True)b
+						email = db.StringProperty(Required=True)
 						photo = db.blob(default=None)
 						credit = db.IntegerProperty(default=0)
 						registrationDate = DateProperty()
