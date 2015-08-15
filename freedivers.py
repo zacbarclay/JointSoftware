@@ -29,6 +29,7 @@ class DiverUser(ndb.Model):
     #stores info about users
     userId = ndb.StringProperty(indexed=True)
     fruit = ndb.StringProperty(indexed=False)
+    isTreasurer = ndb.BooleanProperty(indexed=False)
 
 class MainPage(webapp2.RequestHandler):
 
@@ -49,6 +50,7 @@ class MainPage(webapp2.RequestHandler):
             url_linktext = 'Login'
 
         template_values = {
+            'isTreasurer':True
         }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')

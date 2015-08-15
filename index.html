@@ -7,7 +7,9 @@
 </head>
 <body>
 	<a href="/events" class="button">Events Edit</a>
-	<a href="/users?name=Dave&reps=2" class="button button-small">Users</a>
+	{% if isTreasurer %}
+		<a href="/users?name=Dave&reps=2" class="button button-small">Users</a>
+	{% endif %}
 	<a href="" class="button button-small">Logout</a>
 </body>
 </html>
