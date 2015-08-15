@@ -37,9 +37,9 @@ def guestbook_key(guestbook_name=DEFAULT_GUESTBOOK_NAME):
 
 
 class DiverUser(ndb.Model):
-	#stores info about users
-	userId = ndb.StringProperty(indexed=False)
-	fruit = ndb.StringProperty(indexed=False)
+    #stores info about users
+    userId = ndb.StringProperty(indexed=False)
+    fruit = ndb.StringProperty(indexed=False)
 
 class Author(ndb.Model):
     #Sub model for representating an author.
@@ -62,7 +62,6 @@ class MainPage(webapp2.RequestHandler):
             ancestor=guestbook_key(guestbook_name)).order(-Greeting.date)
         greetings = greetings_query.fetch(10)
 		
-		#myVar = 23
 	
         user = users.get_current_user()
         if user:
@@ -95,40 +94,44 @@ class Events(webapp2.RequestHandler):
 class UserCreate(webapp2.RequestHandler):
 
 	def post(self):
-		#capture the form data and save to db
-		user_id = "blank"
-		user = users.get_current_user()
-		if user:
-			userId = user.user_id()
-		else:
-			self.redirect(users.create_login_url(self.request.uri))
-		
-		#guestbook_name = DEFAULT_GUESTBOOK_NAME
-		#newUser = DiverUser(parent=guestbook_key(guestbook_name))
-		
-		
-		#newUser.fruit ="Apple"
-        #newUser.put()
+            #capture the form data and save to db
+            user_id = "blank"
+            user = users.get_current_user()
+            if user:
+                    userId = user.user_id()
+            else:
+                    self.redirect(users.create_login_url(self.request.uri))
+            
+            guestbook_name = DEFAULT_GUESTBOOK_NAME
+            newUser = DiverUser(parent=guestbook_key(guestbook_name))
+            
+            newUser.fruit = self.request.get('fruit')
+            
+            #newUser.fruit ="Apple"
+            newUser.put()
+
+            query_params = {'guestbook_name': guestbook_name}
+            self.redirect('/?' + urllib.urlencode(query_params))
 
 class Users(webapp2.RequestHandler):
 
 	def get(self):
-		name = self.request.get('name')
-		reps = int(self.request.get('reps'))
-		
-		user = users.get_current_user()
-		
-		if user:
-			name = user.nickname()
-		else:
-			self.redirect(users.create_login_url(self.request.uri))
-		
-		template_values = {
-			'name':name,
-			'reps':reps
-		}
-		template = JINJA_ENVIRONMENT.get_template('users.html')
-		self.response.write(template.render(template_values))
+            name = self.request.get('name')
+            reps = int(self.request.get('reps'))
+            
+            user = users.get_current_user()
+            
+            if user:
+                    name = user.nickname()
+            else:
+                    self.redirect(users.create_login_url(self.request.uri))
+            
+            template_values = {
+                    'name':name,
+                    'reps':reps
+            }
+            template = JINJA_ENVIRONMENT.get_template('users.html')
+            self.response.write(template.render(template_values))
 		
 
 class Guestbook(webapp2.RequestHandler):
@@ -156,6 +159,6 @@ class Guestbook(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
         ('/',MainPage),
         ('/events',Events),
-		('/users',Users),
-		('/userCreate',Guestbook)
+        ('/users',Users),
+        ('/userCreate',UserCreate)
 ], debug = True)
