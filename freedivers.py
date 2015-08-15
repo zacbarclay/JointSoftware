@@ -27,7 +27,7 @@ def diverUser_key(userId):
 
 class DiverUser(ndb.Model):
     #stores info about users
-    userId = ndb.StringProperty(indexed=False)
+    userId = ndb.StringProperty(indexed=True)
     fruit = ndb.StringProperty(indexed=False)
 
 class MainPage(webapp2.RequestHandler):
@@ -96,7 +96,8 @@ class UserUpdate(webapp2.RequestHandler):
         #greetings = greetings_query.fetch(10)
 
         
-        diverUser = DiverUser.gql("WHERE userId = :1", userId) 
+        diverUserQuery = DiverUser.gql("WHERE userId = :1", userId)
+        diverUser = diverUserQuery.get()
         msg = "not set"
         if diverUser:
             diverUser.fruit = self.request.get('fruit')
