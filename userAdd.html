@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+	<title>Add User</title>
+</head>
+<body>
+	
+	<form action="/userCreate" method="post">
+		<textarea name="fruit" rows="3" cols="60">
+		<input type="text" name="firstName">
+		<input type="text" name="lastName">
+		<input type="text" name="password">
+		<select name="role">
+			<option value="treasurer">Treasurer</option>
+			<option value="eventManager">Event Manager</option>
+			<option value="user">User</option>
+		</select>
+		<input type="text" name="email">
+		
+		<input type="text" name="emergencyName">
+		<input type="text" name="emergencyMobile">
+		
+		<input type="submit" value="Create User">
+	</form>
+	
+</body>
+</html>
+{% endautoescape %}

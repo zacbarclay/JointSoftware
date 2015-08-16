@@ -25,12 +25,38 @@ def diverUser_key(userId):
     return ndb.Key('DiverUser',userId)
 
 
-class DiverUser(ndb.Model):
+class User(ndb.Model):
     #stores info about users
     userId = ndb.StringProperty(indexed=True)
+    
     fruit = ndb.StringProperty(indexed=False)
+    
     isTreasurer = ndb.BooleanProperty(indexed=False)
 
+    # general info
+    firstName = db.StringProperty(Required=True)
+    lastName = db.StringProperty(Required=True)
+    password = db.StringProperty(Required=True)
+    role = db.StringProperty(Required=True,choices=set(["treasurer","eventManager","user"]))
+                                                                                                                                                                                                                            choices=set(["treasurer","eventManager","user"]))
+    email = db.StringProperty(Required=True)
+    photo = db.blob(default=None)
+    credit = db.IntegerProperty(default=0)
+    registrationDate = DateProperty()
+                                            
+    # emergancy contact
+    emergencyName = db.StringProperty(Required=True)
+    emergencyMobile = db.StringProperty(Required=True)
+
+#events
+class events(db.Model):
+	
+	# general info
+	eventName = db.StringProperty(Required=True)
+	date = DateProperty()
+	location = PostalAddress()
+	description = db.Text()
+	
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
@@ -39,7 +65,15 @@ class MainPage(webapp2.RequestHandler):
         #greetings_query = Greeting.query(
         #    ancestor=guestbook_key(guestbook_name)).order(-Greeting.date)
         #greetings = greetings_query.fetch(10)
-		
+
+	googleUser = users.get_current_user()
+        userId = googleUser.user_id()
+        diverUserQuery = User.gql("WHERE userId = :1", userId)
+        diverUser = diverUserQuery.get()
+
+        isTreasurer = False
+        if diverUser:
+            isTreasurer = diverUser.isTreasurer# or diverUser.userId == '113550965061104695630' ehren's gmail
 	
         user = users.get_current_user()
         if user:
@@ -50,7 +84,7 @@ class MainPage(webapp2.RequestHandler):
             url_linktext = 'Login'
 
         template_values = {
-            'isTreasurer':True
+            'isTreasurer':isTreasurer
         }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
@@ -66,6 +100,13 @@ class Events(webapp2.RequestHandler):
 		
 	
 class UserCreate(webapp2.RequestHandler):
+
+    def get(self):
+        templateValues={
+        }
+        template = JINJA_ENVIRONMENT.get_template('userAdd.html')
+        self.response.write(template.render(templateValues))
+        
     def post(self):
         #capture the form data and save to db
         user = users.get_current_user()
@@ -80,6 +121,19 @@ class UserCreate(webapp2.RequestHandler):
         
         newUser.fruit = self.request.get('fruit')
         newUser.userId = userId
+        newUser.isTreasurer = False
+
+        newUser.firstName = self.request.get('firstName')
+        newUser.lastName = self.request.get('lastName')
+        newUser.password = self.request.get('password')
+        newUser.role = self.request.get('role')
+        newUser.email = self.request.get('email')
+        #not photo yet
+        #let credit default
+        #not registration date yet
+        newUser.emergencyName = self.request.get('emergencyName')
+        newUser.emergencyMobile = self.request.get('emergencyMobile')
+        
         newUser.put()
 
         query_params = {'org_name': org_name}
@@ -90,13 +144,6 @@ class UserUpdate(webapp2.RequestHandler):
         
         googleUser = users.get_current_user()
         userId = googleUser.user_id()
-        #userKey = diverUser_key(userId)
-        #diverUser = userKey.get()
-
-        #greetings_query = Greeting.query(
-        #    ancestor=guestbook_key(guestbook_name)).order(-Greeting.date)
-        #greetings = greetings_query.fetch(10)
-
         
         diverUserQuery = DiverUser.gql("WHERE userId = :1", userId)
         diverUser = diverUserQuery.get()
@@ -136,6 +183,6 @@ app = webapp2.WSGIApplication([
         ('/',MainPage),
         ('/events',Events),
         ('/users',Users),
-        ('/userCreate',UserCreate),
+        ('/userAdd',UserAdd),
         ('/userUpdate',UserUpdate)
 ], debug = True)
