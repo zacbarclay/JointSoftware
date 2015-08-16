@@ -55,20 +55,18 @@ DEFAULT_ORG_NAME = "freedivers_brisbane"
 #	description = db.Text()"""
 	
 class MainPage(webapp2.RequestHandler):
-
     def get(self):
-        org_name = self.request.get('org_name',
-                                          DEFAULT_ORG_NAME)
+        #org_name = self.request.get('org_name',DEFAULT_ORG_NAME)
         #greetings_query = Greeting.query(
         #    ancestor=guestbook_key(guestbook_name)).order(-Greeting.date)
         #greetings = greetings_query.fetch(10)
 
-	googleUser = users.get_current_user()
-        userId = googleUser.user_id()
+	#googleUser = users.get_current_user()
+        #userId = googleUser.user_id()
         #diverUserQuery = DiverUser.gql("WHERE userId = :1", userId)
         #diverUser = diverUserQuery.get()
 
-        isTreasurer = False
+        #isTreasurer = False
         #if diverUser:
         #    isTreasurer = diverUser.isTreasurer# or diverUser.userId == '113550965061104695630' ehren's gmail
 	
@@ -79,12 +77,13 @@ class MainPage(webapp2.RequestHandler):
         #    url = users.create_login_url(self.request.uri)
         #    url_linktext = 'Login'
 
-        template_values = {
-            'isTreasurer':True#isTreasurer
-        }
+        #template_values = {
+        #    'isTreasurer':True#isTreasurer
+        #}
 
-        template = JINJA_ENVIRONMENT.get_template('index.html')
-        self.response.write(template.render(template_values))
+        #template = JINJA_ENVIRONMENT.get_template('index.html')
+        #self.response.write(template.render(template_values))
+        self.response.write("<h1>WTF</h1>")
 	
 """class Events(webapp2.RequestHandler):
     def get(self):
@@ -168,7 +167,7 @@ class MainPage(webapp2.RequestHandler):
             self.response.write(template.render(template_values))"""
 
 app = webapp2.WSGIApplication([
-        ('/',MainPage),
+        ('/',MainPage)
         #('/events',Events),
         #('/users',Users),
         #('/userAdd',DiverUserAdd),
