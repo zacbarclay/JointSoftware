@@ -15,47 +15,44 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 DEFAULT_ORG_NAME = "freedivers_brisbane"
 
-def org_key(org_name=DEFAULT_ORG_NAME):
+"""def org_key(org_name=DEFAULT_ORG_NAME):
     #Constructs a Datastore key for a freediving organisation entity.
     #We use org_name as the key.
 
-    return ndb.Key('Organisation',org_name)
+    return ndb.Key('Organisation',org_name)"""
 
-def diverUser_key(userId):
-    return ndb.Key('DiverUser',userId)
+"""def diverUser_key(userId):
+    return ndb.Key('DiverUser',userId)"""
 
 
-class User(ndb.Model):
+#class DiverUser(ndb.Model):
     #stores info about users
-    userId = ndb.StringProperty(indexed=True)
-    
-    fruit = ndb.StringProperty(indexed=False)
-    
-    isTreasurer = ndb.BooleanProperty(indexed=False)
+    #userId = ndb.StringProperty(indexed=True)
+    #fruit = ndb.StringProperty(indexed=False)
+    #isTreasurer = ndb.BooleanProperty(indexed=False)
 
     # general info
-    firstName = db.StringProperty(Required=True)
-    lastName = db.StringProperty(Required=True)
-    password = db.StringProperty(Required=True)
-    role = db.StringProperty(Required=True,choices=set(["treasurer","eventManager","user"]))
+    #firstName = db.StringProperty(Required=True)
+    #lastName = db.StringProperty(Required=True)
+    #password = db.StringProperty(Required=True)
+    #role = db.StringProperty(Required=True,choices=set(["treasurer","eventManager","user"]))
                                                                                                                                                                                                                             choices=set(["treasurer","eventManager","user"]))
-    email = db.StringProperty(Required=True)
-    photo = db.blob(default=None)
-    credit = db.IntegerProperty(default=0)
-    registrationDate = DateProperty()
+    #email = db.StringProperty(Required=True)
+    #photo = db.blob(default=None)
+    #credit = db.IntegerProperty(default=0)
+    #registrationDate = DateProperty()
                                             
     # emergancy contact
-    emergencyName = db.StringProperty(Required=True)
-    emergencyMobile = db.StringProperty(Required=True)
+    #emergencyName = db.StringProperty(Required=True)
+    #emergencyMobile = db.StringProperty(Required=True)
 
 #events
-class events(db.Model):
-	
-	# general info
-	eventName = db.StringProperty(Required=True)
-	date = DateProperty()
-	location = PostalAddress()
-	description = db.Text()
+"""class events(ndb.Model):
+#	# general info
+#	eventName = db.StringProperty(Required=True)
+#	date = DateProperty()
+#	location = PostalAddress()
+#	description = db.Text()"""
 	
 class MainPage(webapp2.RequestHandler):
 
@@ -68,42 +65,36 @@ class MainPage(webapp2.RequestHandler):
 
 	googleUser = users.get_current_user()
         userId = googleUser.user_id()
-        diverUserQuery = User.gql("WHERE userId = :1", userId)
-        diverUser = diverUserQuery.get()
+        #diverUserQuery = DiverUser.gql("WHERE userId = :1", userId)
+        #diverUser = diverUserQuery.get()
 
         isTreasurer = False
-        if diverUser:
-            isTreasurer = diverUser.isTreasurer# or diverUser.userId == '113550965061104695630' ehren's gmail
+        #if diverUser:
+        #    isTreasurer = diverUser.isTreasurer# or diverUser.userId == '113550965061104695630' ehren's gmail
 	
-        user = users.get_current_user()
-        if user:
-            url = users.create_logout_url(self.request.uri)
-            url_linktext = 'Logout'
-        else:
-            url = users.create_login_url(self.request.uri)
-            url_linktext = 'Login'
+        #if googleUser:
+        #    url = users.create_logout_url(self.request.uri)
+        #    url_linktext = 'Logout'
+        #else:
+        #    url = users.create_login_url(self.request.uri)
+        #    url_linktext = 'Login'
 
         template_values = {
-            'isTreasurer':isTreasurer
+            'isTreasurer':True#isTreasurer
         }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
 	
-
-
-class Events(webapp2.RequestHandler):
-
-	def get(self):
-		self.response.write("EVENTS")
+"""class Events(webapp2.RequestHandler):
+    def get(self):
+        self.response.write("EVENTS")"""
 		
 		
 	
-class UserCreate(webapp2.RequestHandler):
-
+"""class DiverUserAdd(webapp2.RequestHandler):
     def get(self):
-        templateValues={
-        }
+        templateValues={}
         template = JINJA_ENVIRONMENT.get_template('userAdd.html')
         self.response.write(template.render(templateValues))
         
@@ -123,23 +114,23 @@ class UserCreate(webapp2.RequestHandler):
         newUser.userId = userId
         newUser.isTreasurer = False
 
-        newUser.firstName = self.request.get('firstName')
-        newUser.lastName = self.request.get('lastName')
-        newUser.password = self.request.get('password')
-        newUser.role = self.request.get('role')
-        newUser.email = self.request.get('email')
+        #newUser.firstName = self.request.get('firstName')
+        #newUser.lastName = self.request.get('lastName')
+        #newUser.password = self.request.get('password')
+        #newUser.role = self.request.get('role')
+        #newUser.email = self.request.get('email')
         #not photo yet
         #let credit default
         #not registration date yet
-        newUser.emergencyName = self.request.get('emergencyName')
-        newUser.emergencyMobile = self.request.get('emergencyMobile')
+        #newUser.emergencyName = self.request.get('emergencyName')
+        #newUser.emergencyMobile = self.request.get('emergencyMobile')
         
         newUser.put()
 
         query_params = {'org_name': org_name}
-        self.redirect('/?' + urllib.urlencode(query_params))
+        self.redirect('/?' + urllib.urlencode(query_params))"""
 
-class UserUpdate(webapp2.RequestHandler):
+"""class DiverUserUpdate(webapp2.RequestHandler):
     def post(self):
         
         googleUser = users.get_current_user()
@@ -155,9 +146,9 @@ class UserUpdate(webapp2.RequestHandler):
         else:
             msg = "not put"
         query_params = {'msg': msg}
-        self.redirect('/?' + urllib.urlencode(query_params))
+        self.redirect('/?' + urllib.urlencode(query_params))"""
     
-class Users(webapp2.RequestHandler):
+"""class Users(webapp2.RequestHandler):
 
 	def get(self):
             name = self.request.get('name')
@@ -172,17 +163,14 @@ class Users(webapp2.RequestHandler):
             else:
                     self.redirect(users.create_login_url(self.request.uri))
             
-            template_values = {
-                    'name':name,
-                    'reps':reps
-            }
+            template_values = {}
             template = JINJA_ENVIRONMENT.get_template('users.html')
-            self.response.write(template.render(template_values))
+            self.response.write(template.render(template_values))"""
 
 app = webapp2.WSGIApplication([
         ('/',MainPage),
-        ('/events',Events),
-        ('/users',Users),
-        ('/userAdd',UserAdd),
-        ('/userUpdate',UserUpdate)
+        #('/events',Events),
+        #('/users',Users),
+        #('/userAdd',DiverUserAdd),
+        #('/userUpdate',DiverUserUpdate)
 ], debug = True)
