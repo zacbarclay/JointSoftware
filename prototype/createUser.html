@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/global.css"/>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/createUser.css"/>
+</head>
+<body>
+	<a id='btnHome' href="/home" class="button">Home</a>
+	<div id="privliges">
+		<a href="/activateTreasurer" class="button privligeButton">Activate Treasurer</a>
+		<a href="/activateEventManager" class="button privligeButton">Deactivate Event Manager</a>
+		<a href="/activateAdmin" class="button privligeButton">Deactivate Admin</a>
+	</div>
+	<img src="theiProfilePhoto.dynamic" alt="Profile Photo" onclick="uploadPhoto()">
+	<form id="userDetails" action="/createUser" method="post">
+	
+		<label for="name">
+			Name
+			<input name="name" type="text" value=""><br/>
+		</label>
+		
+		<label for="email">
+			Email
+			<input name="email" type="text" value=""><br/>
+		</label>
+		
+		<label for="emergencyName">
+			Emergency Name
+			<input name="emergencyName" type="text" value=""><br/>
+		</label>
+		
+		<label for="emergencyMobile">
+			Emergency Mobile
+			<input name="emergencyMobile" type="text" value=""><br/>
+		</label>
+		
+		<label for="username">
+			Name
+			<input name="username" type="text" value=""><br/>
+		</label>
+		
+		<label for="password">
+			Password
+			<input name="password" type="text" value=""><br/>
+		</label>
+		
+		<input type="submit" value="Create User">
+	
+	</form>
+
+</body>
+</html>

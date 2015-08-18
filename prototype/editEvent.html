@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/global.css"/>
+	<link type="text/css" rel="stylesheet" href="/stylesheets/editEvent.css"/>
+</head>
+<body>
+	<a id='btnHome' href="/home" class="button">Home</a>
+	<div id="privliges">
+		<a href="/activateTreasurer" class="button privligeButton">Activate Treasurer</a>
+		<a href="/activateEventManager" class="button privligeButton">Deactivate Event Manager</a>
+		<a href="/activateAdmin" class="button privligeButton">Deactivate Admin</a>
+	</div>
+	<form id="eventDetails" action="/createEvent" method="post">
+	
+		<label for="name">
+			Event Name
+			<input name="name" type="text"><br/>
+		</label>
+		
+		<label for="date">
+			Date
+			<input name="date" type="date"><br/>
+		</label>
+		
+		<label for="time">
+			Time
+			<input name="time" type="time"><br/>
+		</label>
+		
+		<label for="location">
+			Location
+			<input name="location" type="text"><br/>
+		</label>
+		
+		<label for="desc">
+			Description
+			<textarea name="desc" type="textarea" rows="10" cols="30"></textarea>
+		</label>
+		
+		<input type="submit" value="Create Event">
+	
+	</form>
+
+</body>
+</html>
