@@ -5,12 +5,16 @@
 	<link type="text/css" rel="stylesheet" href="/stylesheets/viewAttendees.css"/>
 </head>
 <body>
+	<div id="topMenu">
+		<a id='btnEvents' href="/events" class="button">Events</a>
+		<a id='btnProfile' href="/profile" class="button">Profile</a>
+		<a id='btnUsers' href="/users" class="button">Users</a><!--only visible to admin-->
+	</div>
 	<div id="privliges">
 		<a href="/activateTreasurer" class="button privligeButton">Activate Treasurer</a>
 		<a href="/activateEventManager" class="button privligeButton">Deactivate Event Manager</a>
 		<a href="/activateAdmin" class="button privligeButton">Deactivate Admin</a>
 	</div>
-	<a id='btnBackToEventDetails' href="/eventDetails" class="buttonBack">Back</a>
 	<span id="printAttendees" class="button" onclick="printAttendees()">Print Attendees</span>
 	<h2>Attendees</h2>
 	<ul>
